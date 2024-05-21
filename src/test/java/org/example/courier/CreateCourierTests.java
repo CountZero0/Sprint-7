@@ -36,7 +36,7 @@ public class CreateCourierTests {
     public void twoIdenticalCourierCreateTest() {
         var courier = Courier.random();
         ValidatableResponse responseFirst = client.createCourier(courier);
-
+        check.createdSuccessfully(responseFirst);
         assertEquals(HttpStatus.SC_CREATED, responseFirst.extract().statusCode());
 
         ValidatableResponse responseSecond = client.createCourier(courier);

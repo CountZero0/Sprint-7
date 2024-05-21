@@ -5,6 +5,7 @@ import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -15,19 +16,23 @@ public class LoginCourierTests {
     private final CourierClient client = new CourierClient();
     private final CourierChecks check = new CourierChecks();
     int courierId;
+    private Courier courier;
 
-    @Test
-    @DisplayName("Courier login with correct data")
-    @Description("Авторизация с корректными данными")
-    public void courierLoginWithCorrectData() {
-        var courier = Courier.random();
+    @Before
+    public void setUp() {
+        courier = Courier.random();
         ValidatableResponse createResponse = client.createCourier(courier);
         check.createdSuccessfully(createResponse);
 
         var creds = CourierCredentials.from(courier);
         ValidatableResponse loginResponse = client.loginCourier(creds);
         courierId = check.loggedInSuccessfully(loginResponse);
+    }
 
+    @Test
+    @DisplayName("Courier login with correct data")
+    @Description("Авторизация с корректными данными")
+    public void courierLoginWithCorrectData() {
         assertNotEquals(0, courierId);
     }
 
@@ -35,10 +40,6 @@ public class LoginCourierTests {
     @DisplayName("Courier login with empty field Login")
     @Description("Попытка авторизации с пустым полем Логин")
     public void courierLoginWithEmptyFieldLoginTest() {
-        var courier = Courier.random();
-        ValidatableResponse createResponse = client.createCourier(courier);
-        check.createdSuccessfully(createResponse);
-
         ValidatableResponse loginResponse = client.loginCourier
                 (new CourierCredentials("", courier.getPassword()));
 
@@ -51,9 +52,6 @@ public class LoginCourierTests {
     @DisplayName("Courier login with empty field Password")
     @Description("Попытка авторизации с пустым полем Пароль")
     public void courierLoginWithEmptyFieldPasswordTest() {
-        var courier = Courier.random();
-        ValidatableResponse createResponse = client.createCourier(courier);
-        check.createdSuccessfully(createResponse);
 
         ValidatableResponse loginResponse = client.loginCourier
                 (new CourierCredentials(courier.getLogin(), ""));
