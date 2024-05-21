@@ -8,10 +8,9 @@ import org.example.orders.OrderClient;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 public class GetOrderListTests {
     private Order order;
@@ -30,6 +29,7 @@ public class GetOrderListTests {
 
         assertEquals(HttpStatus.SC_OK, response.extract().statusCode());
 
-        assertThat(response.extract().path("orders"), notNullValue());
+        List<String> listResponse = response.extract().path("orders");
+        assertFalse(listResponse.isEmpty());
     }
 }

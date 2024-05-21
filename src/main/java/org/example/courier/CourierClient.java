@@ -2,19 +2,19 @@ package org.example.courier;
 
 import io.qameta.allure.Step;
 import io.restassured.response.ValidatableResponse;
-import org.example.orders.Client;
+import org.example.base.Client;
 
 import java.util.Map;
 
 public class CourierClient extends Client {
     private static final String COURIER_PATH = "/courier";
-
+    private static final String BASE_PATH = "/api/v1" ;
     @Step("login courier")
     public ValidatableResponse loginCourier(CourierCredentials creds) {
         return spec()
                 .body(creds)
                 .when()
-                .post(COURIER_PATH + "/login")
+                .post(BASE_PATH + COURIER_PATH + "/login")
                 .then().log().all();
     }
 
@@ -23,7 +23,7 @@ public class CourierClient extends Client {
         return spec()
                 .body(courier)
                 .when()
-                .post(COURIER_PATH)
+                .post(BASE_PATH + COURIER_PATH)
                 .then().log().all();
     }
 
@@ -32,7 +32,7 @@ public class CourierClient extends Client {
         return spec()
                 .body(Map.of("id", id))
                 .when()
-                .delete(COURIER_PATH + "/" + id)
+                .delete(BASE_PATH + COURIER_PATH + "/" + id)
                 .then().log().all();
     }
 }

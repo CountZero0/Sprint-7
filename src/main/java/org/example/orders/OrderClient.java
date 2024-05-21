@@ -2,16 +2,14 @@ package org.example.orders;
 
 import io.qameta.allure.Step;
 import io.restassured.response.ValidatableResponse;
+import org.example.base.Client;
 
-import static io.restassured.RestAssured.given;
-
-public class OrderClient extends ClientSpec {
+public class OrderClient extends Client {
     private static final String ORDER_CREATE_URL ="/api/v1/orders";
 
     @Step("Создание заказа")
     public ValidatableResponse create(Order order) {
-        return given()
-                .spec(getBaseSpecSettings())
+        return spec()
                 .body(order)
                 .when()
                 .post(ORDER_CREATE_URL)
@@ -20,8 +18,7 @@ public class OrderClient extends ClientSpec {
 
     @Step("Получение списка заказов")
     public ValidatableResponse getOrderList() {
-        return given()
-                .spec(getBaseSpecSettings())
+        return spec()
                 .when()
                 .get(ORDER_CREATE_URL)
                 .then().log().all();
